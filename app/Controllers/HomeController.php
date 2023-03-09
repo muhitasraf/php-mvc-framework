@@ -9,4 +9,7 @@ class HomeController{
     public function test2(){
         echo 'its work 2';
     }
+    public function test3(){
+        echo 'its work 2';
+    }
 }

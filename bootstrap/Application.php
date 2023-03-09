@@ -6,16 +6,17 @@ class Application{
     public function run(){
 
         $callable = $this->match($this->getMethod(), $this->getPath());
-        
-        // echo '<pre>';
-        // print_r(self::getPath());
-        // echo '<pre>';
-        // var_dump(substr(self::getPath(), -1));
-        // echo '<pre>';
-        // print_r(self::$map[$this->getMethod()]);
-        // echo substr(self::getPath(), strpos(self::getPath(), '/', 1),strlen(self::getPath()));
-        // echo '<br>'.substr(self::getPath(), -1);
-        // exit;
+
+        echo $this->getPath();
+        echo '<pre>';
+        print_r(self::getPath());
+        echo '<pre>';
+        var_dump(substr(self::getPath(), -1));
+        echo '<pre>';
+        print_r(self::$map[$this->getMethod()]);
+        echo substr(self::getPath(), strpos(self::getPath(), '/', 1),strlen(self::getPath()));
+        echo '<br>'.strlen(self::getPath());
+        exit;
 
         if(!$callable){
             throw new \Exception('404 Not Found', 404);
@@ -40,10 +41,9 @@ class Application{
     {
         foreach (self::$map[$method] as $uri=>$call){
             if (substr($url, -1) === '/' && $uri != '/'){
-                //remove the slash
                 $url = substr($url, 0, -1);
             }
-            //if our $uri does not contain a pre-slash, we add it
+            
             if (substr($url, strpos($url, '/', 1),strlen($url)) === $uri){
                 return $call;
             }
