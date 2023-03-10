@@ -11,7 +11,7 @@
         "psr-4": {
             "App\\" : "app/",
             "Core\\" : "bootstrap/"
-        }
-    },
-    "require": {}
+        },
+        "files" : ["bootstrap/helpers/app.php"]
+    }
 }
