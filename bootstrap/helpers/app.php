@@ -15,12 +15,9 @@ if (!function_exists('view')) {
 if (!function_exists('dd')) {
     function dd($data)
     {
-        if(is_array($data)){
-            echo '<pre>';
-            print_r($data);
-        }else{
-            echo $data;
-        }
-        die;
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        exit();
     }
 }
