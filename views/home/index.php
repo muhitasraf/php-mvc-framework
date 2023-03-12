@@ -9,26 +9,30 @@
 </head>
 <body>
     
-    <h1><?php echo $t2; ?></h1>
-    <form action="" >
+    <?php 
+    //$_SESSION['t']='tes'; 
+    if(isset($_SESSION)) print_r( $_SESSION);
+    ?>
+    <form action="<?php echo route("test");?>" class="role" method="post" enctype="multipart/form-data">
+        
         <input type="text" class="name" name="name" id="">
-        <input type="button" class="btn" value="submit">
+        <input type="submit" class="btn" value="submit">
     </form>
 
 </body>
 </html>
 <script>
-    $('.btn').click(function(){
-        // alert($('.name').val());
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost/php-mvc-framework/test',
-            data: {'name':$('.name').val()},
-            dataType: 'JSON',
-            success: function(data) {
-                console.log(data);
+    // $('.btn').click(function(){
+    //     // alert($('.name').val());
+    //     $.ajax({
+    //         type: 'get',
+    //         url: 'http://localhost/php-mvc-framework/test',
+    //         data: {'name':$('.name').val()},
+    //         dataType: 'JSON',
+    //         success: function(data) {
+    //             console.log(data);
                 
-            }
-        });
-    });
+    //         }
+    //     });
+    // });
 </script>

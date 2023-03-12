@@ -13,13 +13,15 @@ class HomeController extends Controller{
     }
 
     public function test2(){
-        dd(str_replace('public','',dirname($_SERVER['SCRIPT_NAME'])));
-        // dd(dirname(dirname(__FILE__)));
-        // echo json_encode($_GET);
-        return redirect('home.index');
+        $with = [
+            'errors' => $_POST ?? ''
+        ];
+        return redirect('',['with'=>$with]);
     }
 
     public function test3(){
+
+        
         echo 'its work 3';
     }
 
