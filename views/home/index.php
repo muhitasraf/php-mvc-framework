@@ -9,7 +9,6 @@
 </head>
 <body>
     
-    <h1><?php echo $t1; ?></h1><br>
     <h1><?php echo $t2; ?></h1>
     <form action="" >
         <input type="text" class="name" name="name" id="">
@@ -22,9 +21,9 @@
     $('.btn').click(function(){
         // alert($('.name').val());
         $.ajax({
-            type: 'POST',
+            type: 'get',
             url: 'http://localhost/php-mvc-framework/test',
-            data: $('.name').val(),
+            data: {'name':$('.name').val()},
             dataType: 'JSON',
             success: function(data) {
                 console.log(data);

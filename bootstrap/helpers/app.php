@@ -21,3 +21,9 @@ if (!function_exists('dd')) {
         exit();
     }
 }
+
+if(!function_exists('redirect')){
+    function redirect($redirect_to){
+        return header("location:$redirect_to");
+    }
+}
