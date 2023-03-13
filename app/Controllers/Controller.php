@@ -1,10 +1,13 @@
 <?php
     
 namespace App\Controllers;
-// use Core\Request;
-class Controller {
+
+use QueryBuilder;
+
+class Controller extends QueryBuilder{
     public function __construct() {
 
     }
+    
     
 }

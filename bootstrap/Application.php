@@ -16,7 +16,6 @@ class Application{
 
         
         $callable = $this->match($http_method, $url_path);
-        // dd($callable);
 
         if(!$callable){
             throw new \Exception('404 Not Found', 404);
@@ -31,8 +30,8 @@ class Application{
         if(!is_callable($class, $method)){
             throw new \Exception("Method '$method' is not found in class '$callable[class]'", 500);
         }
-        // if(isset($_GET['route'])){unset($_GET['route']);}
-        // if(isset($_REQUEST['route'])){unset($_REQUEST['route']);}
+        if(isset($_GET['route'])){unset($_GET['route']);}
+        if(isset($_REQUEST['route'])){unset($_REQUEST['route']);}
         $class = new $class;
         $class->$method($this->request);
         return;        
@@ -40,7 +39,6 @@ class Application{
 
     private function match($method, $url)
     {
-        // dd(self::$map);
         $route = substr($url, strpos($url, '/', 1), strlen($url));
         $last_slash_pos = strripos($route, '/');
         $str_after_last_slash = substr($route, $last_slash_pos +1, strlen($route));
