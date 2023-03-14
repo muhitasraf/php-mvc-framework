@@ -1,6 +1,6 @@
 <?php
-include '../config/db.php';
-// include 'helper.php';
+namespace Core;
+
 class QueryBuilder
 {
     private $fields = [];
@@ -14,12 +14,26 @@ class QueryBuilder
     private $query;
     private $columns = [];
     private $values = [];
-    private $db;
-    private $con;
+    protected $pdo;
+    private $dbhost = 'localhost';
+	private $dbname = 'insaf_service_db';
+	private $dbuser = 'root';
+	private $dbpass = '';
+
     public function __construct()
     {
-        $this->db = new Database();
-        $this->con =  $this->db->getCon();
+        try {
+			$this->pdo = new \PDO('mysql:host='.$this->dbhost.';dbname='.$this->dbname, $this->dbuser, $this->dbpass);
+		}catch (\PDOException $e){
+			echo "Error!: " . $e->getMessage() . "<br/>";
+			die();
+		}
+    }
+
+    public static function __callStatic($method, $args) {
+        $called = get_called_class();
+        $class = new $called();
+        return $class->$method(...$args);
     }
 
     public function select(string ...$select) {
@@ -87,7 +101,7 @@ class QueryBuilder
         $this->query .= ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order));
         $this->query .= ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
 
-        $pdoStatement = $this->con->prepare($this->query);
+        $pdoStatement = $this->pdo->prepare($this->query);
         $pdoStatement->execute();
         $data = $pdoStatement->fetch(\PDO::FETCH_ASSOC);
         return $data;
@@ -102,11 +116,14 @@ class QueryBuilder
         $this->query .= ($this->conditions === [] ? '' : ' WHERE ' . implode(' ', $this->conditions));
         $this->query .= ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order));
         $this->query .= ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
-
-        $pdoStatement = $this->con->prepare($this->query);
+        $pdoStatement = $this->pdo->prepare($this->query);
         $pdoStatement->execute();
         $data = $pdoStatement->fetchAll(\PDO::FETCH_ASSOC);
         return $data;
+    }
+
+    protected function query($query){
+        return $this->pdo->query($query);
     }
 
     public function insert($data,$batch=null): string
@@ -133,14 +150,14 @@ class QueryBuilder
                 $this->query = 'Error: Multidimention Array! Insert as batch.';
             }
         }
-        $this->query = $this->con->prepare($this->query)->execute();
+        $this->query = $this->pdo->prepare($this->query)->execute();
         return $this->query;
     }
 
     public function delete()
     {
         $this->query = 'DELETE FROM ' . implode(', ', $this->from) . ($this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions));
-        $this->query = $this->con->prepare($this->query)->execute();
+        $this->query = $this->pdo->prepare($this->query)->execute();
         return $this->query;
     }
 

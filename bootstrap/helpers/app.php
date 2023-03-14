@@ -32,7 +32,6 @@ if (!function_exists('redirect')) {
     function redirect($url=null,$with=[]) {
         
         if ($with){
-            // dd($with['with']);
             with($with['with']);
         }
         return header('Location:'.URL.$url);
