@@ -2,9 +2,7 @@
     
 namespace App\Controllers;
 
-use Core\QueryBuilder;
-
-class Controller extends QueryBuilder{
+class Controller {
     public function __construct() {
 
     }

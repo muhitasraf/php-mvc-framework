@@ -1,6 +1,7 @@
 <?php
 namespace Core;
 
+
 class QueryBuilder
 {
     private $fields = [];
@@ -15,25 +16,33 @@ class QueryBuilder
     private $columns = [];
     private $values = [];
     protected $pdo;
-    private $dbhost = 'localhost';
-	private $dbname = 'insaf_service_db';
-	private $dbuser = 'root';
-	private $dbpass = '';
+    protected static $instance = null;
 
-    public function __construct()
-    {
-        try {
-			$this->pdo = new \PDO('mysql:host='.$this->dbhost.';dbname='.$this->dbname, $this->dbuser, $this->dbpass);
-		}catch (\PDOException $e){
-			echo "Error!: " . $e->getMessage() . "<br/>";
-			die();
-		}
+    protected function __construct() {
+
+    }
+    protected function __clone() {
+
     }
 
-    public static function __callStatic($method, $args) {
-        $called = get_called_class();
-        $class = new $called();
-        return $class->$method(...$args);
+    public static function instance()
+    {
+        if (self::$instance === null)
+        {
+            $opt  = array(
+                \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                \PDO::ATTR_EMULATE_PREPARES   => FALSE,
+            );
+            $dsn = 'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset='.DB_CHAR;
+            self::$instance = new \PDO($dsn, DB_USER, DB_PASS, $opt);
+        }
+        return self::$instance;
+    }
+
+    public static function __callStatic($method, $args)
+    {
+        return call_user_func_array(array(self::instance(), $method), $args);
     }
 
     public function select(string ...$select) {
@@ -43,9 +52,10 @@ class QueryBuilder
         return $this;
     }
 
-    public function table(string $table, ?string $alias = null){
-        $this->from[] = $alias === null ? $table : "$table $alias";
-        return $this;
+    public static function table(string $table, ?string $alias = null){
+        $obj = new self;
+        $obj->from[] = $alias === null ? $table : "$table $alias";
+        return $obj;
     }
 
     public function where(string ...$where){
@@ -101,7 +111,7 @@ class QueryBuilder
         $this->query .= ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order));
         $this->query .= ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
 
-        $pdoStatement = $this->pdo->prepare($this->query);
+        $pdoStatement = self::instance()->prepare($this->query);
         $pdoStatement->execute();
         $data = $pdoStatement->fetch(\PDO::FETCH_ASSOC);
         return $data;
@@ -116,14 +126,14 @@ class QueryBuilder
         $this->query .= ($this->conditions === [] ? '' : ' WHERE ' . implode(' ', $this->conditions));
         $this->query .= ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order));
         $this->query .= ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
-        $pdoStatement = $this->pdo->prepare($this->query);
+        $pdoStatement = self::instance()->prepare($this->query);
         $pdoStatement->execute();
         $data = $pdoStatement->fetchAll(\PDO::FETCH_ASSOC);
         return $data;
     }
 
-    protected function query($query){
-        return $this->pdo->query($query);
+    public static function query($query){
+        return self::instance()->query($query);
     }
 
     public function insert($data,$batch=null): string
@@ -150,38 +160,42 @@ class QueryBuilder
                 $this->query = 'Error: Multidimention Array! Insert as batch.';
             }
         }
-        $this->query = $this->pdo->prepare($this->query)->execute();
+        $this->query = self::instance()->prepare($this->query)->execute();
         return $this->query;
     }
 
     public function delete()
     {
         $this->query = 'DELETE FROM ' . implode(', ', $this->from) . ($this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions));
-        $this->query = $this->pdo->prepare($this->query)->execute();
+        $this->query = self::instance()->prepare($this->query)->execute();
         return $this->query;
     }
 
-    public function update()
+    public function update($data)
     {
-        $this->query = 'UPDATE ' . implode(', ', $this->from)
-            . ' SET ' . implode(', ', $this->columns)
-            . ($this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions));
-
-        // $this->query = $this->con->prepare($this->query)->execute();
+        if (count($data) == count($data, COUNT_RECURSIVE)){
+            $this->columns = implode(', ', array_map(fn($k, $v) => ("$k = ".(is_numeric($v) ? "$v" : "'$v'")), array_keys($data), $data));
+            $this->query = 'UPDATE ' . implode(', ', $this->from)
+            . ' SET ' . $this->columns . ($this->conditions === [] ? '' : ' WHERE ' . implode(' = ', $this->conditions));
+        }else{
+            foreach($data as $key=>$d){
+                $this->columns = implode(', ', array_map(fn($k, $v) => ("$k = ".(is_numeric($v) ? "$v" : "'$v'")), array_keys($d), $d));
+                $this->query .= 'UPDATE ' . implode(', ', $this->from) . ' SET ' . $this->columns . ($this->conditions === [] ? '' : ' WHERE ' . implode(' = ', $this->conditions)). '; ';
+            }
+        }
+        $this->query = self::instance()->prepare($this->query)->execute();
         return $this->query;
     }
 
-    public function set(string ...$columns){
+    // public function set(string ...$columns){
         
-        foreach ($columns as $column) {
-            $this->columns[] = "$column = :$column";
-        }
-        dd($this);
-        return $this;
-    }
+    //     foreach ($columns as $column) {
+    //         $this->columns[] = "$column = :$column";
+    //     }
+    //     dd($this);
+    //     return $this;
+    // }
 
 }
 
-// $qb = new QueryBuilder();
-// echo $qb->select('product_title','title_slug')->table('products','p')->leftJoin('comments c','c.product_id = p.product_id')->fetch();
 ?>
