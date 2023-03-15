@@ -1,8 +1,7 @@
 <?php
 namespace Core;
 
-
-class QueryBuilder
+class DB
 {
     private $fields = [];
     private $conditions = [];
@@ -186,15 +185,6 @@ class QueryBuilder
         $this->query = self::instance()->prepare($this->query)->execute();
         return $this->query;
     }
-
-    // public function set(string ...$columns){
-        
-    //     foreach ($columns as $column) {
-    //         $this->columns[] = "$column = :$column";
-    //     }
-    //     dd($this);
-    //     return $this;
-    // }
 
 }
 

@@ -30,7 +30,6 @@ if (!function_exists('dd')) {
 
 if (!function_exists('redirect')) {
     function redirect($url=null,$with=[]) {
-        
         if ($with){
             with($with['with']);
         }
@@ -61,5 +60,21 @@ if (!function_exists('session')) {
             return $_SESSION[$key] ?? '';
         }
         return;
+    }
+}
+
+if (!function_exists('_csrf')) {
+    function _csrf()
+    {
+        $csrf_token = bin2hex(random_bytes(32));
+        session('_csrf',$csrf_token);
+        return '<input type="hidden" id="_csrf" name="_csrf" value='.$csrf_token.'>';
+    }
+}
+
+if (!function_exists('auth')) {
+    function auth()
+    {
+        return session('logged_in');
     }
 }

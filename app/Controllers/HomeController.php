@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Home;
+use Core\DB;
 
 class HomeController extends Controller{
     public $home;
@@ -10,7 +11,6 @@ class HomeController extends Controller{
         $this->home = new Home();
     }
     public function test(){
-
         //Fetch Data Using Query Builder
         $data = Home::table('products')->select('product_title','product_price')->fetchAll();
 
@@ -19,21 +19,25 @@ class HomeController extends Controller{
 
         //Fetch Data Using Raw Query From Model
         $data2 = $this->home->test()->fetchAll();
+
         $d = [
             'product_title'=> 'This title test',
             'product_price'=>1001
         ];
-        $q = Home::table('products')->where('product_id',1)->update($d);
-        dd($q);
+        // $q = Home::table('products')->where('product_id',1)->update($d);
+
+        //Fetch Data Using Raw Query using DB class
+        $data3 = DB::query('select * from users')->fetchAll();
+
+
         $t2 = 'First variable that pass from controller to view';
         return view('home.index',compact('t2'));
     }
 
     public function test2(){
-        $with = [
-            'errors' => $_POST ?? ''
-        ];
-        return redirect('',['with'=>$with]);
+        
+
+        return redirect('test/re');
     }
 
     public function test3(){
