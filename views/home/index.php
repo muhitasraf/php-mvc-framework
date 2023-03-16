@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <h4>Data : </h4><?php echo $t2;?>
     <form action="<?php echo route("test");?>" class="role" method="post" enctype="multipart/form-data">
         <?php echo _csrf(); ?>
         <input type="text" class="name" name="name" id="">
@@ -27,7 +27,6 @@
     //         dataType: 'JSON',
     //         success: function(data) {
     //             console.log(data);
-                
     //         }
     //     });
     // });

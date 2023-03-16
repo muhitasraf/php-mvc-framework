@@ -4,12 +4,14 @@ use Core\Application;
 
 $app = new Application();
 
+//This function can generate Url
 if (!function_exists('route')) {
     function route($url=null) {
         return URL.$url;
     }
 }
 
+//This function rendering all view file
 if (!function_exists('view')) {
     function view($view, $params = []): bool
     {
@@ -18,6 +20,7 @@ if (!function_exists('view')) {
     }
 }
 
+//This function dumps data and closed further execution
 if (!function_exists('dd')) {
     function dd($data)
     {
@@ -28,6 +31,7 @@ if (!function_exists('dd')) {
     }
 }
 
+//This function redirect to given url
 if (!function_exists('redirect')) {
     function redirect($url=null,$with=[]) {
         if ($with){
@@ -37,6 +41,7 @@ if (!function_exists('redirect')) {
     }
 }
 
+//This function can pass data when redirect to another url
 if (!function_exists('with')) {
     function with($with=null)
     {
@@ -47,6 +52,7 @@ if (!function_exists('with')) {
     }
 }
 
+//This function save data to session
 if (!function_exists('session')) {
     function session($key=null,$val=null)
     {
@@ -63,6 +69,7 @@ if (!function_exists('session')) {
     }
 }
 
+//This function output a CSRF filed
 if (!function_exists('_csrf')) {
     function _csrf()
     {
@@ -72,9 +79,34 @@ if (!function_exists('_csrf')) {
     }
 }
 
+//This function checked authentication
 if (!function_exists('auth')) {
     function auth()
     {
         return session('logged_in');
+    }
+}
+
+//This function return asset path
+if (!function_exists('asset')) {
+    function asset($path='') {
+        return ASSET_URL.$path;
+    }
+}
+
+// This function save all error in storage/logs
+if(!function_exists('Logs')){
+    function Logs($log_data='') {
+        if (is_array($log_data)){
+            foreach ($log_data as $log_txt) {
+                if (is_array($log_data)){
+                    return error_log("Erro : Can't write array to Log file!");
+                }else{
+                    return error_log($log_txt);
+                }
+            }
+        } else {
+            return error_log($log_data);
+        }
     }
 }
