@@ -12,10 +12,15 @@ class Model extends DB{
     }
     private function csrf_token_verification()
     {
-        if (isset($_POST['_csrf'])) {
-            if (!empty($_POST['_csrf']) && hash_equals($_SESSION['_csrf'], $_POST['_csrf'])) {
-                return;
-            } else {
+        if ($_POST) {
+            if (isset($_POST['_csrf'])) {
+                if (!empty($_POST['_csrf']) && hash_equals($_SESSION['_csrf'], $_POST['_csrf'])) {
+                    return;
+                } else {
+                    echo '<h3>This page has been expired!</h3>';
+                    exit;
+                }
+            }else{
                 echo '<h3>This page has been expired!</h3>';
                 exit;
             }

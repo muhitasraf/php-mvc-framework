@@ -9,12 +9,8 @@
 </head>
 <body>
     
-
     <form action="<?php echo route("test");?>" class="role" method="post" enctype="multipart/form-data">
-        <?php echo _csrf(); ?>    
-        <?php  
-    if(isset($_SESSION)) print_r( $_SESSION);
-    ?>
+        <?php echo _csrf(); ?>
         <input type="text" class="name" name="name" id="">
         <input type="submit" class="btn" value="submit">
     </form>
