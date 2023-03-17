@@ -1,0 +1,17 @@
+[17-Mar-2023 11:19:11 Asia/Dhaka] Erro : Can't write array to Log file!
+[17-Mar-2023 11:19:12 Asia/Dhaka] Erro : Can't write array to Log file!
+[17-Mar-2023 11:19:18 Asia/Dhaka] Erro : Can't write array to Log file!
+[17-Mar-2023 11:19:22 Asia/Dhaka] PHP Fatal error:  Uncaught Exception: 404 Not Found in E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\bootstrap\Application.php:21
+Stack trace:
+#0 E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\routes\web.php(14): Core\Application->run()
+#1 E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\public\index.php(4): require_once('E:\\Portable Sof...')
+#2 {main}
+  thrown in E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\bootstrap\Application.php on line 21
+[17-Mar-2023 11:19:23 Asia/Dhaka] PHP Fatal error:  Uncaught Exception: 404 Not Found in E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\bootstrap\Application.php:21
+Stack trace:
+#0 E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\routes\web.php(14): Core\Application->run()
+#1 E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\public\index.php(4): require_once('E:\\Portable Sof...')
+#2 {main}
+  thrown in E:\Portable Software\XAMPP\App\xampp\htdocs\php-mvc-framework\bootstrap\Application.php on line 21
+[17-Mar-2023 11:19:28 Asia/Dhaka] Erro : Can't write array to Log file!
+[17-Mar-2023 11:19:34 Asia/Dhaka] Erro : Can't write array to Log file!
