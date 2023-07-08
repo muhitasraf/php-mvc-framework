@@ -185,7 +185,4 @@ class DB
         $this->query = self::instance()->prepare($this->query)->execute();
         return $this->query;
     }
-
 }
-
-?>

@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\Home;
 use Core\DB;
-use PgSql\Lob;
 
 class HomeController extends Controller{
     public $home;
