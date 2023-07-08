@@ -20,6 +20,7 @@ class HomeController extends Controller{
         //Fetch Data Using Raw Query From Model
         $data2 = $this->home->test()->fetchAll();
 
+        //Update data using query builder
         $d = [
             'product_title'=> 'This title test',
             'product_price'=>1001
